@@ -12,10 +12,11 @@ interface ItemDetailProps {
 
 export default function ItemDetail({ item, onBack }: ItemDetailProps) {
   const [view, setView] = useState<'video' | 'illustration'>('video');
+  const baseUrl = import.meta.env.BASE_URL;
 
   const speakName = () => {
     if (item.voiceUrl) {
-      const audio = new Audio(item.voiceUrl);
+      const audio = new Audio(`${baseUrl}${item.voiceUrl.replace(/^\.\//, '')}`);
       audio.play().catch(err => {
         console.error("Audio playback failed:", err);
         // Fallback to speech synthesis if audio file fails
@@ -31,60 +32,63 @@ export default function ItemDetail({ item, onBack }: ItemDetailProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-background flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border/50 bg-white/80 backdrop-blur-md sticky top-0 z-10">
-        <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full">
-          <ArrowLeft size={24} />
-        </Button>
-        <h2 className="font-serif text-xl font-bold truncate px-4">{item.name}</h2>
-        <Button variant="ghost" size="icon" onClick={speakName} className="rounded-full text-primary">
-          <Volume2 size={24} />
-        </Button>
-      </div>
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center overflow-hidden">
+      <div className="w-full max-w-md bg-background flex flex-col relative shadow-2xl h-full">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border/50 bg-white/90 backdrop-blur-md sticky top-0 z-20">
+          <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full">
+            <ArrowLeft size={24} />
+          </Button>
+          <h2 className="font-serif text-lg font-bold truncate px-4 flex-1 text-center">{item.name}</h2>
+          <Button variant="ghost" size="icon" onClick={speakName} className="rounded-full text-primary">
+            <Volume2 size={24} />
+          </Button>
+        </div>
 
-      <div className="flex-1 overflow-y-auto pb-24">
-        {/* Visual Section */}
-        <div className="relative aspect-[9/16] max-h-[70vh] w-full bg-black overflow-hidden">
-          <AnimatePresence mode="wait">
-            {view === 'video' ? (
-              <motion.div
-                key="video"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full h-full"
-              >
-                <video 
-                  src={`./videos/${item.id}.mp4`} 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="illustration"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full h-full relative bg-white"
-              >
-                 <img 
-                  src={`./${item.id}.png`} 
-                  alt={`${item.name} Illustration`}
-                  className="w-full h-full object-contain p-4"
-                  onError={(e) => {
-                    // Fallback to illustrations folder if root fails
-                    (e.target as HTMLImageElement).src = `./illustrations/${item.id}.png`;
-                  }}
-                  referrerPolicy="no-referrer"
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="flex-1 overflow-y-auto pb-24">
+          {/* Visual Section - Strictly 9:16 Aspect Ratio */}
+          <div className="relative w-full bg-black overflow-hidden">
+            <div className="aspect-[9/16] w-full relative">
+              <AnimatePresence mode="wait">
+                {view === 'video' ? (
+                  <motion.div
+                    key="video"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full h-full"
+                  >
+                    <video 
+                      src={`${baseUrl}videos/${item.id}.mp4`} 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="illustration"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full h-full relative bg-white"
+                  >
+                     <img 
+                      src={`${baseUrl}${item.id}.png`} 
+                      alt={`${item.name} Illustration`}
+                      className="w-full h-full object-contain p-4"
+                      onError={(e) => {
+                        // Fallback to illustrations folder if root fails
+                        (e.target as HTMLImageElement).src = `${baseUrl}illustrations/${item.id}.png`;
+                      }}
+                      referrerPolicy="no-referrer"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
           {/* View Toggle Slider */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-xl p-1 rounded-full flex gap-1 border border-white/30">
@@ -149,5 +153,6 @@ export default function ItemDetail({ item, onBack }: ItemDetailProps) {
         </div>
       </div>
     </div>
+  </div>
   );
 }
