@@ -40,7 +40,7 @@ export const MENU_DATA: MenuItem[] = [
     ],
     imageUrl: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=800',
     illustrationUrl: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&q=80&w=800',
-    voiceUrl: '/voice/mint-mocha-iced-latte.mp3',
+    voiceUrl: './voice/mint-mocha-iced-latte.mp3',
   }
 ];
 

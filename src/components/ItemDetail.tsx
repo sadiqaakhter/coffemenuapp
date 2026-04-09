@@ -56,7 +56,7 @@ export default function ItemDetail({ item, onBack }: ItemDetailProps) {
                 className="w-full h-full"
               >
                 <video 
-                  src={`/videos/${item.id}.mp4`} 
+                  src={`./videos/${item.id}.mp4`} 
                   autoPlay 
                   loop 
                   muted 
@@ -73,12 +73,12 @@ export default function ItemDetail({ item, onBack }: ItemDetailProps) {
                 className="w-full h-full relative bg-white"
               >
                  <img 
-                  src={`/${item.id}.png`} 
+                  src={`./${item.id}.png`} 
                   alt={`${item.name} Illustration`}
                   className="w-full h-full object-contain p-4"
                   onError={(e) => {
                     // Fallback to illustrations folder if root fails
-                    (e.target as HTMLImageElement).src = `/illustrations/${item.id}.png`;
+                    (e.target as HTMLImageElement).src = `./illustrations/${item.id}.png`;
                   }}
                   referrerPolicy="no-referrer"
                 />

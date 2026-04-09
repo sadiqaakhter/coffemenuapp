@@ -28,11 +28,11 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
         className="w-64 h-64 relative flex items-center justify-center"
       >
         <img 
-          src="/logo.gif" 
+          src="./logo.gif" 
           alt="Brewesta Logo" 
           className="w-full h-full object-contain"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = '/logo.png';
+            (e.target as HTMLImageElement).src = './logo.png';
           }}
         />
       </motion.div>
