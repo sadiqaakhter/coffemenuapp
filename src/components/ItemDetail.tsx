@@ -16,11 +16,18 @@ export default function ItemDetail({ item, onBack }: ItemDetailProps) {
 
   const speakName = () => {
     if (item.voiceUrl) {
-      const audio = new Audio(`${baseUrl}${item.voiceUrl.replace(/^\.\//, '')}`);
+      // Ensure path is clean and starts with baseUrl
+      const cleanPath = item.voiceUrl.replace(/^\.\//, '').replace(/^\//, '');
+      const audioPath = `${baseUrl}${cleanPath}`;
+      
+      console.log("Attempting to play audio from:", audioPath);
+      
+      const audio = new Audio(audioPath);
       audio.play().catch(err => {
-        console.error("Audio playback failed:", err);
+        console.error("Audio playback failed for path:", audioPath, err);
         // Fallback to speech synthesis if audio file fails
         const utterance = new SpeechSynthesisUtterance(item.name);
+        utterance.lang = 'en-US';
         window.speechSynthesis.speak(utterance);
       });
     } else {

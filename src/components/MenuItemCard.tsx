@@ -9,6 +9,11 @@ interface MenuItemCardProps {
 }
 
 export default function MenuItemCard({ item, onClick }: MenuItemCardProps) {
+  const baseUrl = import.meta.env.BASE_URL;
+  const imageUrl = item.imageUrl.startsWith('http') 
+    ? item.imageUrl 
+    : `${baseUrl}${item.imageUrl.replace(/^\.\//, '')}`;
+
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -19,7 +24,7 @@ export default function MenuItemCard({ item, onClick }: MenuItemCardProps) {
       <Card className="overflow-hidden border-none shadow-none bg-transparent rounded-none">
         <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-secondary/10">
           <img
-            src={item.imageUrl}
+            src={imageUrl}
             alt={item.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             referrerPolicy="no-referrer"
